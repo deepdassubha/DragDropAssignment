@@ -1,9 +1,3 @@
-$(document).ready(function () {
-    dragDropOps.dragOps();
-    dragDropOps.dropOps();
-    dragDropOps.binOps();
-});
-
 var dragDropOps = {
     dragOps: function () {
         $(".product").draggable({
@@ -11,30 +5,32 @@ var dragDropOps = {
             revert: "invalid"
         });
     },
+    dropOps: function () {
 
-    dropOps: function() {
         $(".cart").droppable({
             activeClass: "ui-state-highlight",
             hoverClass: "ui-state-hover",
             accept: '.product:not(".clones")',
-            drop: function (event, ui) {
-                $(this).append($(ui.draggable).clone().addClass('clones'));
-                $('.clones').draggable({
-                    revert: "invalid"
-                });
-                $(ui.draggable).remove();
-            }
+            drop: this.onDropToCart
+
         });
     },
-        
     binOps: function () {
         $(".bin").droppable({
             activeClass: "ui-state-highlight",
             hoverClass: "ui-state-hover",
             accept: ".clones",
-            drop: function (event, ui) {
-                $(ui.draggable).remove();
-            }
+            drop: this.onDropToBin
         });
+    },
+    onDropToCart: function (event, ui) {
+        $(this).append($(ui.draggable).clone().addClass('clones'));
+        $('.clones').draggable({
+            revert: "invalid"
+        });
+        $(ui.draggable).remove();
+    },
+    onDropToBin: function (event, ui) {
+        $(ui.draggable).remove();
     }
 };
